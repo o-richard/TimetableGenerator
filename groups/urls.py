@@ -1,0 +1,35 @@
+from django.urls import path
+
+from . import views
+
+urlpatterns = [
+    path('school/<randomid>/groups/', views.groupdisplay, name="groupview"),
+    path('school/<randomid>/groups/add/', views.groupadd, name="addgroup"),
+    path('school/<randomid>/groups/<groupslug>/edit/', views.groupedit, name="editgroup"),
+    path('school/<randomid>/groups/<groupslug>/delete/', views.groupdelete, name="deletegroup"),
+    path('school/<randomid>/groups/<groupslug>/', views.groupview, name="groupdisplay"),
+    path('school/<randomid>/groups/<groupslug>/classes/', views.classview, name="classview"),
+    path('school/<randomid>/groups/<groupslug>/classes/add/', views.classadd, name="addclass"),
+    path('school/<randomid>/groups/<groupslug>/classes/<classslug>/edit/', views.classedit, name="editclass"),
+    path('school/<randomid>/groups/<groupslug>/classes/<classslug>/delete/', views.classdelete, name="deleteclass"),
+    path('school/<randomid>/groups/<groupslug>/breaks/', views.breakview, name="breakview"),
+    path('school/<randomid>/groups/<groupslug>/breaks/add/', views.breakadd, name="addbreak"),
+    path('school/<randomid>/groups/<groupslug>/breaks/<breakid>/edit/', views.breakedit, name="editbreak"),
+    path('school/<randomid>/groups/<groupslug>/breaks/<breakid>/delete/', views.breakdelete, name="deletebreak"),
+    path('school/<randomid>/groups/<groupslug>/routine/', views.routineview, name="routineview"),
+    path('school/<randomid>/groups/<groupslug>/routine/add/', views.routineadd, name="addroutine"),
+    path('school/<randomid>/groups/<groupslug>/routine/<routineid>/edit/', views.routineedit, name="editroutine"),
+    path('school/<randomid>/groups/<groupslug>/routine/<routineid>/delete/', views.routinedelete, name="deleteroutine"),
+    path('school/<randomid>/groups/<groupslug>/subjects/', views.groupsubjectsiew, name="groupsubjectsview"),
+    path('school/<randomid>/groups/<groupslug>/subjects/add/', views.groupsubjectsadd, name="addgroupsubject"),
+    path('school/<randomid>/groups/<groupslug>/subjects/<subjectslug>/edit/', views.groupsubjectsedit, name="editgroupsubject"),
+    path('school/<randomid>/groups/<groupslug>/subjects/<subjectslug>/delete/', views.groupsubjectsdelete, name="deletegroupsubject"),
+    path('school/<randomid>/groups/<groupslug>/specifications/', views.specificationsview, name="specificationsview"),
+    path('school/<randomid>/groups/<groupslug>/specifications/add/', views.specificationsadd, name="addspecification"),
+    path('school/<randomid>/groups/<groupslug>/specifications/<specificid>/edit/', views.specificationsedit, name="editspecification"),
+    path('school/<randomid>/groups/<groupslug>/specifications/<specificid>/delete/', views.specificationsdelete, name="deletespecification"),
+    path('school/<randomid>/groups/<groupslug>/lessons/', views.lessonsview, name="lessonsview"),
+    path('school/<randomid>/groups/<groupslug>/lessons/add/', views.lessonsadd, name="addlesson"),
+    path('school/<randomid>/groups/<groupslug>/lessons/<lessonid>/edit/', views.lessonsedit, name="editlesson"),
+    path('school/<randomid>/groups/<groupslug>/lessons/<lessonid>/delete/', views.lessonsdelete, name="deletelesson"),
+]

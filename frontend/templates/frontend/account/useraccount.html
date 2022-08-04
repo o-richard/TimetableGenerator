@@ -1,0 +1,23 @@
+{% extends "base/account.html" %}
+
+{% block title %} Account Information {% endblock %}
+{% block content %}
+
+<div class="card mt-2 mx-3" style="width: 95%;">
+  <div class="card-body">
+    <h5 class="card-title"><a href="{% url 'editaccount' %}">Edit Account Information</a></h5>
+  </div>
+</div>
+
+<div class="card mt-2 mx-3" style="width: 95%;">
+    <div class="card-body">
+      <h5 class="card-title"><a href="{% url 'changepassword' %}">Change Password</a></h5>
+    </div>
+  </div>
+
+  <div class="card mt-2 mx-3" style="width: 95%;">
+    <div class="card-body">
+      <h5 class="card-title"><a href="{% url 'deleteaccount' randomid=request.user.randomid %}">Delete Account (This is not reversible)</a></h5>
+    </div>
+  </div>
+{% endblock %}

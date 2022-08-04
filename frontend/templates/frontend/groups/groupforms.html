@@ -1,0 +1,41 @@
+{% extends "base/group.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block title %} {{ thelabel }} {% endblock %}
+
+
+{% block schooldetails %}
+<a class="navbar-brand" href="{% url 'groupdisplay' randomid=theschool.randomid groupslug=thegroup.slug %}"><img src="{{ theschool.schoollogo.url }}" alt="{{ theschool.schoolname }}"  height="50px"> | {{ theschool.schoolname }} | {{ thegroup.groupname }}</a>
+{% endblock %}
+
+{% block navigation %}
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'classview' randomid=theschool.randomid groupslug=thegroup.slug %}">Class</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'routineview' randomid=theschool.randomid groupslug=thegroup.slug %}">Routine</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'breakview' randomid=theschool.randomid groupslug=thegroup.slug %}">Breaks</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'groupsubjectsview' randomid=theschool.randomid groupslug=thegroup.slug %}">Subjects</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'lessonsview' randomid=theschool.randomid groupslug=thegroup.slug %}">Lessons</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'specificationsview' randomid=theschool.randomid groupslug=thegroup.slug %}">Specifications</a>
+</li>
+{% endblock %}
+
+{% block content %}
+<!-- Form -->
+<div class="page-content">
+    <div class="form-v5-content">
+        <label class="form-title">{{ thelabel }}</label>
+        {% crispy form %}
+    </div>
+</div>
+{% endblock %}

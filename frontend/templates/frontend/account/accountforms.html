@@ -1,0 +1,14 @@
+{% extends "base/account.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block title %} {{ thelabel }} {% endblock %}
+{% block content %}
+
+<div class="page-content">
+    <div class="form-v5-content">
+        <label class="form-title">{{ thelabel }}</label>
+        {% crispy form %}
+    </div>
+</div>
+{% endblock %}

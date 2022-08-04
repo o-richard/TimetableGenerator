@@ -1,0 +1,61 @@
+{% extends "base/school.html" %}
+
+{% block title %} Groups {% endblock %}
+
+{% block schooldetails %}
+<a class="navbar-brand" href="{% url 'schoolview' randomid=theschool.randomid %}"><img src="{{ theschool.schoollogo.url }}" alt="{{ theschool.schoolname }}" height="50px"> | {{ theschool.schoolname }}</a>
+{% endblock %}
+
+{% block navigation %}
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'groupview' randomid=theschool.randomid %}">Groups</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'subjectview' randomid=theschool.randomid %}">Subjects</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'streamview' randomid=theschool.randomid %}">Streams</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'teacherview' randomid=theschool.randomid %}">Teachers</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="{% url 'timetablesview' randomid=theschool.randomid %}">Timetables</a>
+</li>
+{% endblock %}
+
+{% block content %}
+
+{% if schoolgroups|length > 0 %}
+<div class="card mt-2 mx-3" style="width: 95%;">
+    <div class="card-body">
+      <h5 class="card-title my_card_title">Groups</h5>
+    </div>
+  </div>
+{% for group in schoolgroups %}
+<div class="card mt-2 mx-3" style="width: 95%;">
+    <div class="card-body">
+      <h5 class="card-title">{{ group.groupname }}</h5>
+      <a href="{% url 'groupdisplay' randomid=theschool.randomid groupslug=group.slug %}" class="card-link">View group</a>
+      <a href="{% url 'editgroup' randomid=theschool.randomid groupslug=group.slug %}" class="card-link">Edit group</a>
+      <a href="{% url 'deletegroup' randomid=theschool.randomid groupslug=group.slug %}" class="card-link">Delete group (This is not reversible)</a>
+    </div>
+</div>
+{% endfor %}
+{% else %}
+<div class="card mt-2 mx-3" style="width: 95%;">
+  <div class="card-body">
+    <h5 class="card-title">Sorry, you have no group currently.</h5>
+  </div>
+</div>
+{% endif %}
+<div class="container mb-3">
+    <div class="row">
+      <div class="col-md-12">
+        <button class="btn mt-2 mx-2"  style="width: 95%;">
+          <a href="{% url 'addgroup' randomid=theschool.randomid %}">Add New Group</a>
+        </button>
+      </div>
+</div>
+
+{% endblock %}

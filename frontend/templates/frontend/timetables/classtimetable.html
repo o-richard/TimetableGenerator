@@ -1,0 +1,78 @@
+{% extends "base/school.html" %}
+
+{% block title %} Timetables {% endblock %}
+
+{% block schooldetails %}
+<a class="navbar-brand" href="{% url 'schoolview' randomid=theschool.randomid %}"><img src="{{ theschool.schoollogo.url }}" alt="{{ theschool.schoolname }}" height="50px"> | {{ theschool.schoolname }}</a>
+{% endblock %}
+
+{% block navigation %}
+<li class="nav-item">
+  <a class="nav-link" href="{% url 'groupview' randomid=theschool.randomid %}">Groups</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="{% url 'subjectview' randomid=theschool.randomid %}">Subjects</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="{% url 'streamview' randomid=theschool.randomid %}">Streams</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="{% url 'teacherview' randomid=theschool.randomid %}">Teachers</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'timetablesview' randomid=theschool.randomid %}">Timetables</a>
+</li>
+{% endblock %}
+
+{% block content %}
+<div class="card mt-2 mx-3" style="width: 95%;">
+    <div class="card-body">
+      <h5 class="card-title my_card_title">Timetable</h5>
+      <h5 class="card-title my_card_title">Class: {{ theclass.classname }} Stream: {{ theclass.stream.streamname }} Class Teacher: {{ theclass.classteacher.teachername }}</h5>
+    </div>
+</div>
+<style>
+    table, tr, th, td {
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+    th, td {
+      text-align: center;
+    }
+</style>
+<div class="container-fluid">
+{% for a in timetable %}
+<table class="mb-2 mt-2">
+    <tr>
+        <th>Day</th>
+        {% for b in a.lessons %}
+        <th>{{ b.starttime|time:"h:i a" }} - {{ b.endtime|time:"h:i a" }}</th>
+        {% endfor %}
+    </tr>
+    <tr>
+        <td class="px-2">{{ a.day }}</td>
+        {% for b in a.lessons %}
+        {% if b.identity == 'Break' %}
+        <td>
+            {{ b.breakname }}
+        </td>
+        {% else %}
+        <td style="background-color: {{ b.subject.color }}67;">
+            <div class="text-center">
+                <p>{{ b.subject.subjectname }}</p>
+                <p>{{ b.teacher.teachername }}</p>
+            </div>
+        </td>
+        {% endif %}
+        {% endfor %}
+    </tr>
+</table>
+{% endfor %}
+<div class="card mt-2 mx-3 mb-4" style="width: 95%;">
+    <div class="card-body">
+        <h5 class="card-title"></h5>
+      <a href="{% url 'pdftimetable' randomid=theschool.randomid timetableid=thetimetable.id classlug=theclass.slug %}" class="card-link">View Timetable (PDF Version)</a>
+    </div>
+</div>
+</div>
+{% endblock %}

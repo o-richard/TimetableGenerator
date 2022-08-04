@@ -1,0 +1,300 @@
+{% extends "base/school.html" %}
+
+{% block title %} School Information {% endblock %}
+
+{% block schooldetails %}
+<a class="navbar-brand" href="{% url 'schoolview' randomid=theschool.randomid %}"><img src="{{ theschool.schoollogo.url }}" alt="{{ theschool.schoolname }}" height="50px"> | {{ theschool.schoolname }}</a>
+{% endblock %}
+
+{% block navigation %}
+<li class="nav-item">
+  <a class="nav-link" href="{% url 'groupview' randomid=theschool.randomid %}">Groups</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="{% url 'subjectview' randomid=theschool.randomid %}">Subjects</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="{% url 'streamview' randomid=theschool.randomid %}">Streams</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="{% url 'teacherview' randomid=theschool.randomid %}">Teachers</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="{% url 'timetablesview' randomid=theschool.randomid %}">Timetables</a>
+</li>
+{% endblock %}
+ss
+{% block content %}
+{% if timetables|length > 0 %}
+<div class="card mt-2 mx-3" style="width: 95%;">
+    <div class="card-body">
+      <h5 class="card-title my_card_title">Timetables Groups</h5>
+    </div>
+  </div>
+{% for timetable in timetables %}
+<div class="card mt-2 mx-3" style="width: 95%;">
+    <div class="card-body">
+      <h5 class="card-title">{{ timetable.timetablegroupname }}  Date created: {{ timetable.datecreated }}</h5>
+      <a href="{% url 'timetablesingroup' randomid=theschool.randomid timetableid=timetable.id %}" class="card-link">View Timetables In This Group</a>
+      <a href="{% url 'edittimetable' randomid=theschool.randomid timetableid=timetable.id %}" class="card-link">Edit Name</a>
+      <a href="{% url 'deletetimetable' randomid=theschool.randomid timetableid=timetable.id %}" class="card-link">Delete Timetable Group (This is not reversible)</a>
+    </div>
+</div>
+{% endfor %}
+{% if result is False %}
+<div class="card mt-2 mx-3" style="width: 95%;">
+  <div class="card-body">
+    <h5 class="my_card_title">You Must meet these requirements before generating a new timetable</h5>
+    {% for one in list_of_errors %}
+      <p style="color:red;">{{ one.error }}</p>
+    {% endfor %}
+  </div>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <button class="btn mt-2 mx-2"  style="width: 95%;">
+        <a href="{% url 'timetablesview' randomid=theschool.randomid %}">View All Timetables</a>
+      </button>
+    </div>
+  </div>
+</div>
+{% else %}
+<div class="container">
+<div class="row">
+  <div class="col-md-6">
+    <button class="btn mt-2 mx-2"  style="width: 95%;">
+      <a href="{% url 'timetablecheck' randomid=theschool.randomid %}">Check if Meet Requirements for Generating A Timetable</a>
+    </button>
+  </div>
+  <div class="col-md-6">
+    <button class="btn mt-2 mx-2"  style="width: 95%;">
+      <a href="{% url 'generatetimetable' randomid=theschool.randomid %}">Generate A Timetable</a>
+    </button>
+  </div>
+  </div>
+  <div class="row">
+  <div class="col-md-12">
+    <button class="btn mt-2 mx-2"  style="width: 95%;">
+      <a href="{% url 'timetablesview' randomid=theschool.randomid %}">View All Timetables</a>
+    </button>
+  </div>
+</div>
+</div>
+{% endif %}
+{% else %}
+<div class="card mt-2 mx-3" style="width: 95%;">
+  <div class="card-body">
+    <h5 class="card-title">Sorry, you have no timetable currently.</h5>
+    {% if result is False %}
+    <h5 class="my_card_title">You Must meet these requirements before generating a timetable</h5>
+    {% for one in list_of_errors %}
+      <p style="color:red;">{{ one.error }}</p>
+    {% endfor %}
+    {% else %}
+    <div class="row">
+      <div class="col-md-6">
+        <button class="btn mt-2 mx-2"  style="width: 95%;">
+          <a href="{% url 'timetablecheck' randomid=theschool.randomid %}">Check if Meet Requirements for Generating A Timetable</a>
+        </button>
+      </div>
+      <div class="col-md-6">
+        <button class="btn mt-2 mx-2"  style="width: 95%;">
+          <a href="{% url 'generatetimetable' randomid=theschool.randomid %}">Generate A Timetable</a>
+        </button>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endif %}
+
+{% if schoolgroups|length > 0 %}
+<div class="card mt-2 mx-3" style="width: 95%;">
+    <div class="card-body">
+      <h5 class="card-title my_card_title">Groups</h5>
+    </div>
+  </div>
+{% for group in schoolgroups %}
+<div class="card mt-2 mx-3" style="width: 95%;">
+    <div class="card-body">
+      <h5 class="card-title">{{ group.groupname }}</h5>
+      <a href="{% url 'groupdisplay' randomid=theschool.randomid groupslug=group.slug %}" class="card-link">View group</a>
+      <a href="{% url 'editgroup' randomid=theschool.randomid groupslug=group.slug %}" class="card-link">Edit group</a>
+      <a href="{% url 'deletegroup' randomid=theschool.randomid groupslug=group.slug %}" class="card-link">Delete group (This is not reversible)</a>
+    </div>
+</div>
+{% endfor %}
+<div class="container">
+    <div class="row">
+      <div class="col-md-6">
+        <button class="btn mt-2 mx-2"  style="width: 95%;">
+            <a href="{% url 'addgroup' randomid=theschool.randomid %}">Add New Group</a>
+        </button>
+      </div>
+      <div class="col-md-6">
+        <button class="btn mt-2 mx-2"  style="width: 95%;">
+          <a href="{% url 'groupview' randomid=theschool.randomid %}">View All Groups</a>
+        </button>
+      </div>
+</div>
+</div>
+{% else %}
+<div class="card mt-2 mx-3" style="width: 95%;">
+  <div class="card-body">
+    <h5 class="card-title">Sorry, you have no group currently.</h5>
+  </div>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <button class="btn mt-2 mx-2"  style="width: 95%;">
+        <a href="{% url 'addgroup' randomid=theschool.randomid %}">Add New Group</a>
+      </button>
+    </div>
+</div>
+</div>
+{% endif %}
+
+
+{% if subjects|length > 0 %}
+<div class="card mt-2 mx-3" style="width: 95%;">
+    <div class="card-body">
+      <h5 class="card-title my_card_title">Subjects</h5>
+    </div>
+  </div>
+{% for subject in subjects %}
+<div class="card mt-2 mx-3" style="width: 95%;">
+    <div class="card-body">
+      <h5 class="card-title">{{ subject.subjectname }}</h5>
+      <a href="{% url 'editsubject' randomid=theschool.randomid subjectslug=subject.slug %}" class="card-link">Edit subject</a>
+      {% if subject.ifcandelete is True %}<a href="{% url 'deletesubject' randomid=theschool.randomid subjectslug=subject.slug %}" class="card-link">Delete subject (This is not reversible)</a>
+      {% else %}<a href="#" class="card-link disabled">To delete this subject, delete the timetable using this subject.</a>{% endif %}
+    </div>
+</div>
+{% endfor %}
+<div class="container">
+    <div class="row">
+      <div class="col-md-6">
+        <button class="btn mt-2 mx-2"  style="width: 95%;">
+            <a href="{% url 'addsubject' randomid=theschool.randomid %}">Add New Subject</a>
+        </button>
+      </div>
+      <div class="col-md-6">
+        <button class="btn mt-2 mx-2"  style="width: 95%;">
+          <a href="{% url 'subjectview' randomid=theschool.randomid %}">View All Subjects</a>
+        </button>
+      </div>
+</div>
+</div>
+{% else %}
+<div class="card mt-2 mx-3" style="width: 95%;">
+  <div class="card-body">
+    <h5 class="card-title">Sorry, you have no subjects currently.</h5>
+  </div>
+</div>
+<div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <button class="btn mt-2 mx-2"  style="width: 95%;">
+          <a href="{% url 'addsubject' randomid=theschool.randomid %}">Add New Subject</a>
+        </button>
+      </div>
+</div>
+</div>
+{% endif %}
+
+
+{% if streams|length > 0 %}
+<div class="card mt-2 mx-3" style="width: 95%;">
+    <div class="card-body">
+      <h5 class="card-title my_card_title">Streams</h5>
+    </div>
+  </div>
+{% for stream in streams %}
+<div class="card mt-2 mx-3" style="width: 95%;">
+    <div class="card-body">
+      <h5 class="card-title">{{ stream.streamname }}</h5>
+      <a href="{% url 'editstream' randomid=theschool.randomid streamslug=stream.slug %}" class="card-link">Edit Stream</a>
+      {% if stream.ifcandelete is True %}<a href="{% url 'deletestreams' randomid=theschool.randomid streamslug=stream.slug %}" class="card-link">Delete stream (This is not reversible)</a>{% else %}<a href="#" class="card-link disabled">To delete this stream, delete the timetable using the classes that use this stream.</a>{% endif %}
+    </div>
+</div>
+{% endfor %}
+<div class="container">
+    <div class="row">
+      <div class="col-md-6">
+        <button class="btn mt-2 mx-2"  style="width: 95%;">
+            <a href="{% url 'addstream' randomid=theschool.randomid %}">Add New Stream</a>
+        </button>
+      </div>
+      <div class="col-md-6">
+        <button class="btn mt-2 mx-2"  style="width: 95%;">
+          <a href="{% url 'streamview' randomid=theschool.randomid %}">View All Streams</a>
+        </button>
+      </div>
+</div>
+</div>
+{% else %}
+<div class="card mt-2 mx-3" style="width: 95%;">
+  <div class="card-body">
+    <h5 class="card-title">Sorry, you have no stream currently.</h5>
+  </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <button class="btn mt-2 mx-2"  style="width: 95%;">
+                <a href="{% url 'addstream' randomid=theschool.randomid %}">Add New Stream</a>
+            </button>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% if teachers|length > 0 %}
+<div class="card mt-2 mx-3" style="width: 95%;">
+    <div class="card-body">
+      <h5 class="card-title my_card_title">Teachers</h5>
+    </div>
+  </div>
+{% for teacher in teachers %}
+<div class="card mt-2 mx-3" style="width: 95%;">
+    <div class="card-body">
+      <h5 class="card-title">{{ teacher.teachername }}</h5>
+      <a href="{% url 'editteacher' randomid=theschool.randomid teacherrandomid=teacher.randomid %}" class="card-link">Edit Teacher</a>
+      {% if teacher.ifcandelete is True %}<a href="{% url 'deleteteachers' randomid=theschool.randomid teacherrandomid=teacher.randomid %}" class="card-link">Delete teacher (This is not reversible)</a>
+      {% else %}<a href="#" class="card-link disabled">To delete this teacher, delete the timetable using this teacher.</a>{% endif %}
+    </div>
+</div>
+{% endfor %}
+<div class="container mb-3">
+    <div class="row">
+        <div class="col-md-6">
+            <button class="btn mt-2 mx-2"  style="width: 95%;">
+                <a href="{% url 'addteacher' randomid=theschool.randomid %}">Add New Teacher</a>
+            </button>
+          </div>
+        <div class="col-md-6">
+            <button class="btn mt-2 mx-2"  style="width: 95%;">
+              <a href="{% url 'teacherview' randomid=theschool.randomid %}">View All Teachers</a>
+            </button>
+        </div>
+    </div>
+  </div>
+{% else %}
+<div class="card mt-2 mx-3" style="width: 95%;">
+  <div class="card-body">
+    <h5 class="card-title">Sorry, you have no teachers currently.</h5>
+  </div>
+</div>
+<div class="container mb-3">
+    <div class="row">
+        <div class="col-md-12">
+            <button class="btn mt-2 mx-2"  style="width: 95%;">
+                <a href="{% url 'addteacher' randomid=theschool.randomid %}">Add New Teacher</a>
+            </button>
+          </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends "base/school.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block title %} {{ thelabel }} {% endblock %}
+
+{% block schooldetails %}
+<a class="navbar-brand" href="{% url 'schoolview' randomid=theschool.randomid %}"><img src="{{ theschool.schoollogo.url }}" alt="{{ theschool.schoolname }}" height="50px"> | {{ theschool.schoolname }}</a>
+{% endblock %}
+
+{% block navigation %}
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'groupview' randomid=theschool.randomid %}">Groups</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'subjectview' randomid=theschool.randomid %}">Subjects</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'streamview' randomid=theschool.randomid %}">Streams</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'teacherview' randomid=theschool.randomid %}">Teachers</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'timetablesview' randomid=theschool.randomid %}">Timetables</a>
+</li>
+{% endblock %}
+
+{% block content %}
+<!-- Form -->
+<div class="page-content">
+    <div class="form-v5-content">
+        <label class="form-title">{{ thelabel }}</label>
+        <form method='post' action="{% url 'editteacher' randomid=theschool.randomid teacherrandomid=ateacherrandomid %}">
+            {% crispy form %}
+            {{ formset.management_form|crispy }}
+            
+            {% for form in formset %}
+                {{ form|as_crispy_errors }}
+                {% crispy form formset_helper %}
+            {% endfor %}
+            <input class='btn btn-primary' type='submit' value='Save'>
+        </form>
+    </div>
+</div>
+{% endblock %}

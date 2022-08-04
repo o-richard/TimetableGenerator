@@ -1,0 +1,102 @@
+body {
+	margin:  0;
+}
+.page-content {
+	width: 100%;
+	margin:  0 auto;
+	display: flex;
+	align-items: center;
+}
+.form-v5-content  {
+	background: #fff;
+	width: 670px;
+	border-radius: 8px;
+	font-family: 'Roboto', sans-serif;
+	margin: 3% 25%;
+	color: #333;
+	font-weight: 400;
+	position: relative;
+	font-size: 18px;
+}
+
+label.form-title, .form-title>legend {
+    margin-left: 25%;
+    font-weight: 900;
+    font-size: 25px;
+    text-decoration-line: underline;
+    text-decoration-color: blue;
+}
+.my_card_title {
+	text-align: center;
+	font-weight: 900;
+    font-size: 25px;
+    text-decoration-line: underline;
+    text-decoration-color: blue;
+}
+.form-v5-content .form-detail {
+	padding: 30px 45px 30px 45px;
+	position: relative;
+}
+.form-detail h2 {
+	font-weight: 700;
+	font-size: 25px;
+	text-align: center;
+	position: relative;
+	padding: 3px 0 20px;
+	margin-bottom: 40px;
+}
+.form-detail h2::after {
+	background: #3786bd;
+	width: 50px;
+	height: 2px;
+	content: "";
+	position: absolute;
+	top: 100%;
+	left: 50%;
+    transform: translateX(-50%);
+}
+.form-detail .form-row {
+	position: relative;
+}
+.form-detail .form-row-last {
+	text-align: center;
+}
+.form-detail label {
+	display: block;
+	font-size: 18px;
+	padding-bottom: 10px;
+}
+.form-detail .input-text {
+	margin-bottom: 26px;
+}
+.form-detail input {
+	width: 94.5%;
+    padding: 10.5px 15px;
+    border: 1px solid #e5e5e5;
+    appearance: unset;
+    outline: none;
+    border-radius: 4px;
+	font-family: 'Roboto', sans-serif;
+	font-weight: 400;
+	font-size: 18px;
+}
+.form-detail input:focus {
+	border: 1px solid #b3b3b3;
+}
+.form-detail .register {
+	font-size: 18px;
+	color: #fff;
+	background: #3786bd;
+	border-radius: 5px;
+	width: 180px;
+	box-shadow: 0px 5px 15px 0px rgba(0, 0, 0, 0.2);
+	border: none;
+	margin: 19px 0 40px;
+	cursor: pointer;
+}
+.form-detail .register:hover {
+	background: #2f73a3;
+}
+.form-detail .form-row-last input {
+	padding: 14px;
+}

@@ -1,0 +1,32 @@
+{% extends "base/account.html" %}
+
+{% block title %} Schools {% endblock %}
+{% block content %}
+{% if schools|length > 0 %}
+{% for school in schools %}
+<div class="card mt-2 mx-3" style="width: 95%;">
+    <div class="card-body">
+      <h5 class="card-title">{{ school.schoolname }}</h5>
+      <a href="{% url 'schoolview' randomid=school.randomid %}" class="card-link">View School</a>
+      <a href="{% url 'editschool' randomid=school.randomid %}" class="card-link">Edit School</a>
+      <a href="{% url 'deleteschool' randomid=school.randomid %}" class="card-link">Delete School And Its Contents (This is not reversible)</a>
+    </div>
+</div>
+{% endfor %}
+{% else %}
+<div class="card mt-2 mx-3" style="width: 95%;">
+  <div class="card-body">
+    <h5 class="card-title">Sorry, you have no schools currently.</h5>
+  </div>
+</div>
+{% endif %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <button class="btn mt-2 mx-2"  style="width: 95%;">
+        <a href="{% url 'addschool' %}">Add New School</a>
+      </button>
+    </div>
+  </div>
+</div>
+{% endblock %}

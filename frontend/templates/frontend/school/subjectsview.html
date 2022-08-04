@@ -1,0 +1,61 @@
+{% extends "base/school.html" %}
+
+{% block title %} Subjects {% endblock %}
+
+{% block schooldetails %}
+<a class="navbar-brand" href="{% url 'schoolview' randomid=theschool.randomid %}"><img src="{{ theschool.schoollogo.url }}" alt="{{ theschool.schoolname }}" height="50px"> | {{ theschool.schoolname }}</a>
+{% endblock %}
+
+{% block navigation %}
+<li class="nav-item">
+  <a class="nav-link" href="{% url 'groupview' randomid=theschool.randomid %}">Groups</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="{% url 'subjectview' randomid=theschool.randomid %}">Subjects</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="{% url 'streamview' randomid=theschool.randomid %}">Streams</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="{% url 'teacherview' randomid=theschool.randomid %}">Teachers</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="{% url 'timetablesview' randomid=theschool.randomid %}">Timetables</a>
+</li>
+{% endblock %}
+
+{% block content %}
+
+{% if subjects|length > 0 %}
+<div class="card mt-2 mx-3" style="width: 95%;">
+    <div class="card-body">
+      <h5 class="card-title my_card_title">Subjects</h5>
+    </div>
+  </div>
+{% for subject in subjects %}
+<div class="card mt-2 mx-3" style="width: 95%;">
+    <div class="card-body">
+      <h5 class="card-title">{{ subject.subjectname }}</h5>
+      <a href="{% url 'editsubject' randomid=theschool.randomid subjectslug=subject.slug %}" class="card-link">Edit subject</a>
+      {% if subject.ifcandelete is True %}<a href="{% url 'deletesubject' randomid=theschool.randomid subjectslug=subject.slug %}" class="card-link">Delete subject (This is not reversible)</a>
+      {% else %}<a href="#" class="card-link disabled">To delete this subject, delete the timetable using this subject.</a>{% endif %}
+    </div>
+</div>
+{% endfor %}
+{% else %}
+<div class="card mt-2 mx-3" style="width: 95%;">
+  <div class="card-body">
+    <h5 class="card-title">Sorry, you have no subjects currently.</h5>
+  </div>
+</div>
+{% endif %}
+<div class="container mb-3">
+    <div class="row">
+      <div class="col-md-12">
+        <button class="btn mt-2 mx-2"  style="width: 95%;">
+          <a href="{% url 'addsubject' randomid=theschool.randomid %}">Add New Subject</a>
+        </button>
+      </div>
+    </div>
+
+{% endblock %}

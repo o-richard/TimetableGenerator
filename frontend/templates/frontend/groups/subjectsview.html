@@ -1,0 +1,65 @@
+{% extends "base/group.html" %}
+
+{% block title %} Subjects {% endblock %}
+
+
+{% block schooldetails %}
+<a class="navbar-brand" href="{% url 'groupdisplay' randomid=theschool.randomid groupslug=thegroup.slug %}"><img src="{{ theschool.schoollogo.url }}" alt="{{ theschool.schoolname }}"  height="50px"> | {{ theschool.schoolname }} | {{ thegroup.groupname }}</a>
+{% endblock %}
+
+{% block navigation %}
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'classview' randomid=theschool.randomid groupslug=thegroup.slug %}">Class</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'routineview' randomid=theschool.randomid groupslug=thegroup.slug %}">Routine</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'breakview' randomid=theschool.randomid groupslug=thegroup.slug %}">Breaks</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'groupsubjectsview' randomid=theschool.randomid groupslug=thegroup.slug %}">Subjects</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'lessonsview' randomid=theschool.randomid groupslug=thegroup.slug %}">Lessons</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'specificationsview' randomid=theschool.randomid groupslug=thegroup.slug %}">Specifications</a>
+</li>
+{% endblock %}
+
+{% block content %}
+
+{% if subjects|length > 0 %}
+<div class="card mt-2 mx-3" style="width: 95%;">
+    <div class="card-body">
+      <h5 class="card-title my_card_title">Group Subjects</h5>
+    </div>
+  </div>
+{% for subject in subjects %}
+<div class="card mt-2 mx-3" style="width: 95%;">
+    <div class="card-body">
+      <h5 class="card-title">{{ subject.subject.subjectname }}</h5>
+      <a href="{% url 'editgroupsubject' randomid=theschool.randomid groupslug=thegroup.slug subjectslug=subject.subject.slug %}" class="card-link">Edit Subject</a>
+      <a href="{% url 'deletegroupsubject' randomid=theschool.randomid groupslug=thegroup.slug subjectslug=subject.subject.slug %}" class="card-link">Delete Subject (This is not reversible)</a>
+    </div>
+</div>
+{% endfor %}
+{% else %}
+<div class="card mt-2 mx-3" style="width: 95%;">
+  <div class="card-body">
+    <h5 class="card-title">Sorry, you have no subject specified for this group currently.</h5>
+  </div>
+</div>
+{% endif %}
+<div class="container mb-3">
+  <div class="row">
+      <div class="col-md-12">
+          <button class="btn mt-2 mx-2"  style="width: 95%;">
+            <a href="{% url 'addgroupsubject' randomid=theschool.randomid groupslug=thegroup.slug %}">Add New Subject</a>
+          </button>
+      </div>
+  </div>
+</div>
+
+{% endblock %}

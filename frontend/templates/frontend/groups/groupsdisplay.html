@@ -1,0 +1,310 @@
+{% extends "base/group.html" %}
+
+{% block title %} Group Information {% endblock %}
+
+{% block schooldetails %}
+<a class="navbar-brand" href="{% url 'groupdisplay' randomid=theschool.randomid groupslug=thegroup.slug %}"><img src="{{ theschool.schoollogo.url }}" alt="{{ theschool.schoolname }}" height="50px"> | {{ theschool.schoolname }} | {{ thegroup.groupname }}</a>
+{% endblock %}
+
+{% block navigation %}
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'classview' randomid=theschool.randomid groupslug=thegroup.slug %}">Class</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'routineview' randomid=theschool.randomid groupslug=thegroup.slug %}">Routine</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'breakview' randomid=theschool.randomid groupslug=thegroup.slug %}">Breaks</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'groupsubjectsview' randomid=theschool.randomid groupslug=thegroup.slug %}">Subjects</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'lessonsview' randomid=theschool.randomid groupslug=thegroup.slug %}">Lessons</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'specificationsview' randomid=theschool.randomid groupslug=thegroup.slug %}">Specifications</a>
+</li>
+{% endblock %}
+
+{% block content %}
+{% if classes|length > 0 %}
+<div class="card mt-2 mx-3" style="width: 95%;">
+    <div class="card-body">
+      <h5 class="card-title my_card_title">Classes</h5>
+    </div>
+  </div>
+{% for class in classes %}
+<div class="card mt-2 mx-3" style="width: 95%;">
+    <div class="card-body">
+      <h5 class="card-title">Class: {{ class.classname }} Stream: {{ class.stream.streamname }} Class Teacher: {{ class.classteacher.teachername }}</h5>
+      <a href="{% url 'editclass' randomid=theschool.randomid groupslug=thegroup.slug classslug=class.slug %}" class="card-link">Edit Class</a>
+      {% if class.ifcandelete is True %}<a href="{% url 'deleteclass' randomid=theschool.randomid groupslug=thegroup.slug classslug=class.slug %}" class="card-link">Delete Class (This is not reversible)</a>
+      {% else %}<a href="#" class="card-link disabled">To delete this class, delete the timetable using this classes.</a>{% endif %}
+    </div>
+</div>
+{% endfor %}
+<div class="container">
+    <div class="row">
+      <div class="col-md-6">
+        <button class="btn mt-2 mx-2"  style="width: 95%;">
+            <a href="{% url 'addclass' randomid=theschool.randomid groupslug=thegroup.slug %}">Add New Class</a>
+        </button>
+      </div>
+      <div class="col-md-6">
+        <button class="btn mt-2 mx-2"  style="width: 95%;">
+          <a href="{% url 'classview' randomid=theschool.randomid groupslug=thegroup.slug %}">View All Classes</a>
+        </button>
+      </div>
+</div>
+</div>
+{% else %}
+<div class="card mt-2 mx-3" style="width: 95%;">
+  <div class="card-body">
+    <h5 class="card-title">Sorry, you have no classes currently.</h5>
+  </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <button class="btn mt-2 mx-2"  style="width: 95%;">
+              <a href="{% url 'addclass' randomid=theschool.randomid groupslug=thegroup.slug %}">Add New Class</a>
+            </button>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% if routines|length > 0 %}
+<div class="card mt-2 mx-3" style="width: 95%;">
+    <div class="card-body">
+      <h5 class="card-title my_card_title">Routines</h5>
+    </div>
+  </div>
+{% for routine in routines %}
+<div class="card mt-2 mx-3" style="width: 95%;">
+    <div class="card-body">
+      <h5 class="card-title">Day: {{ routine.day }} Start time: {{ routine.starttime }} End time: {{ routine.endtime }}</h5>
+      <a href="{% url 'editroutine' randomid=theschool.randomid groupslug=thegroup.slug routineid=routine.id %}" class="card-link">Edit Routine</a>
+      <a href="{% url 'deleteroutine' randomid=theschool.randomid groupslug=thegroup.slug routineid=routine.id %}" class="card-link">Delete Routine (This is not reversible)</a>
+    </div>
+</div>
+{% endfor %}
+<div class="container">
+    <div class="row">
+      <div class="col-md-6">
+        <button class="btn mt-2 mx-2"  style="width: 95%;">
+            <a href="{% url 'addroutine' randomid=theschool.randomid groupslug=thegroup.slug %}">Add New Routine</a>
+        </button>
+      </div>
+      <div class="col-md-6">
+        <button class="btn mt-2 mx-2"  style="width: 95%;">
+          <a href="{% url 'routineview' randomid=theschool.randomid groupslug=thegroup.slug %}">View All Routines</a>
+        </button>
+      </div>
+</div>
+</div>
+{% else %}
+<div class="card mt-2 mx-3" style="width: 95%;">
+  <div class="card-body">
+    <h5 class="card-title">Sorry, you have no routine specified currently.</h5>
+  </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <button class="btn mt-2 mx-2"  style="width: 95%;">
+              <a href="{% url 'addroutine' randomid=theschool.randomid groupslug=thegroup.slug %}">Add New Routine</a>
+            </button>
+        </div>
+    </div>
+  </div>
+{% endif %}
+
+{% if breaks|length > 0 %}
+<div class="card mt-2 mx-3" style="width: 95%;">
+    <div class="card-body">
+      <h5 class="card-title my_card_title">Breaks</h5>
+    </div>
+  </div>
+{% for break in breaks %}
+<div class="card mt-2 mx-3" style="width: 95%;">
+    <div class="card-body">
+         <h5 class="card-title">{{ break.breakname }}</h5>
+      <h5 class="card-title">Day: {{ break.day }} Start time: {{ break.starttime }} End time: {{ break.endtime }}</h5>
+      <a href="{% url 'editbreak' randomid=theschool.randomid groupslug=thegroup.slug breakid=break.id %}" class="card-link">Edit Break</a>
+      <a href="{% url 'deletebreak' randomid=theschool.randomid groupslug=thegroup.slug breakid=break.id %}" class="card-link">Delete Break (This is not reversible)</a>
+    </div>
+</div>
+{% endfor %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-6">
+      <button class="btn mt-2 mx-2"  style="width: 95%;">
+        <a href="{% url 'addbreak' randomid=theschool.randomid groupslug=thegroup.slug %}">Add New Break</a>
+      </button>
+    </div>
+    <div class="col-md-6">
+      <button class="btn mt-2 mx-2"  style="width: 95%;">
+        <a href="{% url 'breakview' randomid=theschool.randomid groupslug=thegroup.slug %}">View All Breaks</a>
+      </button>
+    </div>
+</div>
+</div>
+{% else %}
+<div class="card mt-2 mx-3" style="width: 95%;">
+  <div class="card-body">
+    <h5 class="card-title">Sorry, you have no breaks specified currently.</h5>
+  </div>
+</div>
+<div class="container mb-3">
+  <div class="row">
+      <div class="col-md-12">
+          <button class="btn mt-2 mx-2"  style="width: 95%;">
+            <a href="{% url 'addbreak' randomid=theschool.randomid groupslug=thegroup.slug %}">Add New Break</a>
+          </button>
+      </div>
+  </div>
+</div>
+{% endif %}
+
+{% if subjects|length > 0 %}
+<div class="card mt-2 mx-3" style="width: 95%;">
+    <div class="card-body">
+      <h5 class="card-title my_card_title">Group Subjects</h5>
+    </div>
+  </div>
+{% for subject in subjects %}
+<div class="card mt-2 mx-3" style="width: 95%;">
+    <div class="card-body">
+      <h5 class="card-title">{{ subject.subject.subjectname }}</h5>
+      <a href="{% url 'editgroupsubject' randomid=theschool.randomid groupslug=thegroup.slug subjectslug=subject.subject.slug %}" class="card-link">Edit Subject</a>
+      <a href="{% url 'deletegroupsubject' randomid=theschool.randomid groupslug=thegroup.slug subjectslug=subject.subject.slug %}" class="card-link">Delete Subject (This is not reversible)</a>
+    </div>
+</div>
+{% endfor %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-6">
+      <button class="btn mt-2 mx-2"  style="width: 95%;">
+        <a href="{% url 'addgroupsubject' randomid=theschool.randomid groupslug=thegroup.slug %}">Add New Subject</a>
+      </button>
+    </div>
+    <div class="col-md-6">
+      <button class="btn mt-2 mx-2"  style="width: 95%;">
+        <a href="{% url 'groupsubjectsview' randomid=theschool.randomid groupslug=thegroup.slug %}">View All Subjects</a>
+      </button>
+    </div>
+</div>
+</div>
+{% else %}
+<div class="card mt-2 mx-3" style="width: 95%;">
+  <div class="card-body">
+    <h5 class="card-title">Sorry, you have no subject specified for this group currently.</h5>
+  </div>
+</div>
+<div class="container mb-3">
+  <div class="row">
+      <div class="col-md-12">
+          <button class="btn mt-2 mx-2"  style="width: 95%;">
+            <a href="{% url 'addgroupsubject' randomid=theschool.randomid groupslug=thegroup.slug %}">Add New Subject</a>
+          </button>
+      </div>
+  </div>
+</div>
+{% endif %}
+
+{% if lessons|length > 0 %}
+<div class="card mt-2 mx-3" style="width: 95%;">
+    <div class="card-body">
+      <h5 class="card-title my_card_title">Lessons</h5>
+    </div>
+  </div>
+{% for lesson in lessons %}
+<div class="card mt-2 mx-3" style="width: 95%;">
+    <div class="card-body">
+      <h5 class="card-title">Subject: {{ lesson.groupsubjects.subject.subjectname }}  Class: {{ lesson.theclass.classname }} Stream: {{ lesson.theclass.stream.streamname }} Teacher: {{ lesson.teacher.teachername }}</h5>
+      <a href="{% url 'editlesson' randomid=theschool.randomid groupslug=thegroup.slug lessonid=lesson.id %}" class="card-link">Edit Lesson</a>
+      <a href="{% url 'deletelesson' randomid=theschool.randomid groupslug=thegroup.slug lessonid=lesson.id %}" class="card-link">Delete Lesson (This is not reversible)</a>
+    </div>
+</div>
+{% endfor %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-6">
+      <button class="btn mt-2 mx-2"  style="width: 95%;">
+        <a href="{% url 'addlesson' randomid=theschool.randomid groupslug=thegroup.slug %}">Add New Lesson</a>
+      </button>
+    </div>
+    <div class="col-md-6">
+      <button class="btn mt-2 mx-2"  style="width: 95%;">
+        <a href="{% url 'lessonsview' randomid=theschool.randomid groupslug=thegroup.slug %}">View All Lessons</a>
+      </button>
+    </div>
+</div>
+</div>
+{% else %}
+<div class="card mt-2 mx-3" style="width: 95%;">
+  <div class="card-body">
+    <h5 class="card-title">Sorry, you have no lesson specified currently.</h5>
+  </div>
+</div>
+<div class="container mb-3">
+  <div class="row">
+      <div class="col-md-12">
+          <button class="btn mt-2 mx-2"  style="width: 95%;">
+            <a href="{% url 'addlesson' randomid=theschool.randomid groupslug=thegroup.slug %}">Add New Lesson</a>
+          </button>
+      </div>
+  </div>
+</div>
+{% endif %}
+
+{% if specifications|length > 0 %}
+<div class="card mt-2 mx-3" style="width: 95%;">
+    <div class="card-body">
+      <h5 class="card-title my_card_title">Specifications</h5>
+    </div>
+  </div>
+{% for specification in specifications %}
+<div class="card mt-2 mx-3" style="width: 95%;">
+    <div class="card-body">
+        <h5 class="card-title">The Lesson: {{ specification.groupsubjectteachers }}</h5>
+      <h5 class="card-title">Day: {{ specification.day }} Start time: {{ specification.starttime }} End time: {{ specification.endtime }}</h5>
+      <a href="{% url 'editspecification' randomid=theschool.randomid groupslug=thegroup.slug specificid=specification.id %}" class="card-link">Edit Specification</a>
+      <a href="{% url 'deletespecification' randomid=theschool.randomid groupslug=thegroup.slug specificid=specification.id %}" class="card-link">Delete Specification (This is not reversible)</a>
+    </div>
+</div>
+{% endfor %}
+<div class="container mb-3">
+  <div class="row">
+    <div class="col-md-6">
+      <button class="btn mt-2 mx-2"  style="width: 95%;">
+        <a href="{% url 'addspecification' randomid=theschool.randomid groupslug=thegroup.slug %}">Add New Specification</a>
+      </button>
+    </div>
+    <div class="col-md-6">
+      <button class="btn mt-2 mx-2"  style="width: 95%;">
+        <a href="{% url 'specificationsview' randomid=theschool.randomid groupslug=thegroup.slug %}">View All Lessons</a>
+      </button>
+    </div>
+</div>
+</div>
+{% else %}
+<div class="card mt-2 mx-3" style="width: 95%;">
+  <div class="card-body">
+    <h5 class="card-title">Sorry, you have no specifications specified currently.</h5>
+  </div>
+</div>
+<div class="container mb-3">
+  <div class="row">
+      <div class="col-md-12">
+          <button class="btn mt-2 mx-2"  style="width: 95%;">
+            <a href="{% url 'addspecification' randomid=theschool.randomid groupslug=thegroup.slug %}">Add New Specification</a>
+          </button>
+      </div>
+  </div>
+</div>
+{% endif %}
+
+{% endblock %}
