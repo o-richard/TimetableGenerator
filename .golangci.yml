@@ -1,0 +1,93 @@
+run:
+  timeout: 1m
+  print-resources-usage: true
+  allow-parallel-runners: true
+linters:
+  disable-all: true
+  enable:
+    - bidichk
+    - bodyclose
+    - containedctx
+    - contextcheck
+    - copyloopvar
+    - decorder
+    - dogsled
+    - dupl
+    - errcheck
+    - errchkjson
+    - errname
+    - errorlint
+    - exhaustive
+    - goconst
+    - gocritic
+    - gocyclo
+    - gofmt
+    - goimports
+    - gosec
+    - gosimple
+    - govet
+    - ineffassign
+    - ireturn
+    - misspell
+    - mnd
+    - nestif
+    - nilerr
+    - nilnil
+    - nolintlint
+    - prealloc
+    - predeclared
+    - sloglint
+    - staticcheck
+    - tagliatelle
+    - tenv
+    - testpackage
+    - thelper
+    - tparallel
+    - unconvert
+    - unparam
+    - unused
+    - usestdlibvars
+    - whitespace
+linters-settings:
+  dupl:
+    threshold: 180
+  errcheck:
+    check-type-assertions: true
+  exhaustive:
+    default-signifies-exhaustive: true
+  gocritic:
+    enabled-tags:
+      - diagnostic
+      - experimental
+      - opinionated
+      - performance
+      - style
+  goimports:
+    local-prefixes: github.com/o-richard/timetablegenerator
+  gosec:
+    excludes:
+      - G115 # integer overflow concerns are already factored in
+      - G404 # cryptography is unnecessary while generating the required random values
+  mnd:
+    checks:
+      - case
+      - condition
+      - operation
+      - return
+  nolintlint:
+    require-explanation: true
+    require-specific: true
+  tagliatelle:
+    case:
+      rules:
+        json: snake
+issues:
+  fix: true
+  max-issues-per-linter: 0
+  max-same-issues: 0
+  exclude-dirs:
+    - openapi
+  exclude-rules:
+    - path: timetable
+      linters:
+        - mnd # varying magic numbers have a semantic meaning

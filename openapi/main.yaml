@@ -1,0 +1,253 @@
+openapi: 3.1.0
+info:
+  version: 1.0.0
+  title: Timetable Generator
+  contact:
+    url: "http://github.com/o-richard"
+  license:
+    name: MIT
+    url: "https://opensource.org/license/MIT"
+  x-logo:
+    url: "https://redocly.github.io/openapi-template/logo.png"
+externalDocs:
+  url: "https://github.com/o-richard/TimetableGenerator"
+servers:
+  - url: "http://localhost:{port}"
+    description: Development Server
+    variables:
+      port:
+        default: "1323"
+  - url: "https://timetable-generator.fly.dev"
+    description: Production Server
+paths:
+  /api/healthz:
+    get:
+      summary: Obtain server health
+      operationId: getHealthz
+      security:
+        - {}
+      responses:
+        "200":
+          description: healthy server
+  /api/generate:
+    post:
+      summary: Generate timetables
+      operationId: postGenerate
+      security:
+        - {}
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              type: object
+              properties:
+                subjects:
+                  type: object
+                  description: the key (an integer) specifies a unique identifier of the subject. it is in specifying lessons.
+                  additionalProperties:
+                    type: string
+                    description: subject's name
+                    minLength: 1
+                    maxLength: 30
+                  example:
+                    1: "Mathematics"
+                    2: "English"
+                teachers:
+                  type: object
+                  description: the key (an integer) specifies a unique identifier of the teacher. it is used in specifying lessons & class teachers.
+                  additionalProperties:
+                    type: object
+                    properties:
+                      teacher_name:
+                        type: string
+                        description: teacher's name
+                        minLength: 1
+                        maxLength: 30
+                      routine:
+                        type: object
+                        description: >-
+                          It restricts generated lessons of a particular day to follow the specified routine. Mandatory lessons do not consider this routine. In case time ranges are not specified on a particular day, the teacher can have a lesson at any given time.
+
+                          The key (an integer) specifies the day. (1-Monday to 7-Sunday).
+                        additionalProperties:
+                          type: array
+                          description: non-overlapping list of time ranges.
+                          items:
+                            $ref: "#/components/schemas/timerange"
+                        example:
+                          1: ["[00:00,09:00]", "[10:00,15:00]"]
+                          2: ["[00:00,09:00]", "[10:00,15:00]"]
+                          3: ["[00:00,09:00]", "[10:00,15:00]"]
+                          4: ["[10:00,15:00]"]
+                          5: ["[00:00,09:00]"]
+                          6: ["[00:00,09:00]"]
+                          7: ["[00:00,09:00]"]
+                    required:
+                      - teacher_name
+                  example:
+                    1:
+                      teacher_name: "Mr. First"
+                      routine:
+                        1: ["[00:00,09:00]"]
+                    2:
+                      teacher_name: "Mr. Last"
+                groups:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      group_name:
+                        type: string
+                        description: group name
+                        minLength: 1
+                        maxLength: 500
+                      lesson_duration_in_minutes:
+                        type: integer
+                        description: lesson duration in minutes
+                        minimum: 1
+                      routine:
+                        type: object
+                        description: the key (an integer) specifies the day. (1-Monday to 7-Sunday).
+                        additionalProperties:
+                          type: object
+                          properties:
+                            period:
+                              $ref: "#/components/schemas/timerange"
+                            breaks:
+                              type: object
+                              description: >-
+                                The breaks should be within the routine range and non-overlapping in nature.
+
+                                The key (a string) specifies the name of the break. it should have 1 - 100 characters in length.
+                              additionalProperties:
+                                $ref: "#/components/schemas/timerange"
+                              example:
+                                "Short Break": "[08:15,09:20]"
+                                "Lunch Break": "[10:00,12:00]"
+                        example:
+                          1:
+                            period: "[00:00,15:10]"
+                            breaks:
+                              "Short Break": "[08:15,09:20]"
+                              "Lunch Break": "[10:00,12:00]"
+                          2:
+                            period: "[00:00,15:10]"
+                            breaks:
+                              "Short Break": "[08:15,09:20]"
+                              "Lunch Break": "[10:00,12:00]"
+                          3:
+                            period: "[00:00,15:10]"
+                            breaks:
+                              "Short Break": "[08:15,09:20]"
+                              "Lunch Break": "[10:00,12:00]"
+                      classes:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            class_name:
+                              type: string
+                              description: class name
+                              minLength: 1
+                              maxLength: 100
+                            teacher_in_charge_id:
+                              type: integer
+                              description: the unique identifier of the teacher incharge of the class
+                            lessons:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  subject_id:
+                                    type: integer
+                                    description: the unique identifier of the subject
+                                  teacher_id:
+                                    type: integer
+                                    description: the unique identifier of the teacher
+                                  max_lesson_count:
+                                    type: integer
+                                    description: >-
+                                      The maximum number of lessons in a week. The total count of mandatory sessions **MUST** be considered since that value is removed from the provided maximum without considering the durations of the mandatory lessons.
+
+                                      In case one does not have a default, they should fail to provide this field or specify zero.
+                                    minimum: 0
+                                    default: 0
+                                  mandatory_specifics:
+                                    type: object
+                                    description: >-
+                                      It forces the lesson to happen at the provided day and time.
+
+                                      The key (an integer) specifies the day. (1-Monday to 7-Sunday).
+                                    additionalProperties:
+                                      type: array
+                                      description: non-overlapping list of time ranges. a time range should be within the day's routine of the group and non-overlapping with its breaks. a time range should not collide with the other mandatory lessons in the class.
+                                      items:
+                                        $ref: "#/components/schemas/timerange"
+                                    example:
+                                      1: ["[00:00,09:00]", "[10:00,15:00]"]
+                                      2: ["[00:00,09:00]", "[10:00,15:00]"]
+                                      3: ["[00:00,09:00]", "[10:00,15:00]"]
+                                      4: ["[10:00,15:00]"]
+                                      5: ["[00:00,09:00]"]
+                                      6: ["[00:00,09:00]"]
+                                      7: ["[00:00,09:00]"]
+                                required:
+                                  - subject_id
+                                  - teacher_id
+                          required:
+                            - class_name
+                            - teacher_in_charge_id
+                            - lessons
+                    required:
+                      - group_name
+                      - routine
+                      - classes
+                      - lesson_duration_in_minutes
+              required:
+                - subjects
+                - teachers
+                - groups
+        required: true
+      responses:
+        "200":
+          description: successful generation. a zip file containing all the generated class and teacher timetables is sent to the client.
+        "400":
+          description: logical errors are present on the provided payload.
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  key:
+                    type: string
+                    enum:
+                      [
+                        "class_validity",
+                        "specifics_validity",
+                        "timetable_generation",
+                      ]
+                    description: >-
+                      - **class_validity**: The gaps in between the mandatory lessons and breaks for a particular day do not allow for full lessons of the specified duration to take place.
+
+                      - **specifics_validity**: Among the specified mandatory lessons, a teacher has more than one lesson happening a given time.
+
+                      - **timetable_generation**: After a certain number of trials, generation of timetables still fail. Possible issues include strict teacher routines, restrictive maximum lesson count, few lesson options.
+                  issues:
+                    type: array
+                    items:
+                      type: string
+                      examples:
+                        - "class '5 Joy' of the group 'Lower Primary' has an invalid schedule for the day 'Thursday'."
+                        - "teacher 'Mr. Richard' with the id '1' has a mandatory lesson overlapping at '8.00 - 9.00' on 'Thursday'"
+        "422":
+          description: invalid payload provided. the provided payload **MUST** follows the documented specifications
+        "500":
+          description: internal server error. the developer should refer to the server logs present in stdout for more information.
+components:
+  schemas:
+    timerange:
+      type: string
+      description: specifies the lower and upper bounds of time. the precision is minute. 24-hour clock is considered. the upper bound must be greater than the lower bound.
+      examples:
+        - "[00:00,09:00]"
+        - "[14:00,23:00]"
