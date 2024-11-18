@@ -285,7 +285,7 @@ func (s *school) generateTimetable() bool {
 						}
 					}
 
-					untriedLessonIndices := make([]int, 0, len(validLesssonIndices)) // track indices of lessons that have not yet been tried
+					untriedLessonIndices := make([]int, len(validLesssonIndices)) // track indices of lessons that have not yet been tried
 					copy(untriedLessonIndices, validLesssonIndices)
 
 					for len(untriedLessonIndices) != 0 {
